@@ -1,0 +1,73 @@
+package search;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        try (Scanner scannerFile = new Scanner(new File(args[1]))) {
+            StringBuilder sb = new StringBuilder();
+            while (scannerFile.hasNext()){
+                sb.append(scannerFile.nextLine()).append("\n");
+            }
+            String[] people = sb.toString().split("\n");
+            System.out.println();
+
+            Scanner scanner = new Scanner(System.in);
+
+            boolean stop = true;
+            while (stop) {
+                System.out.println("=== Menu ===\n" +
+                        "1. Search information.\n" +
+                        "2. Print all data.\n" +
+                        "0. Exit.\n");
+
+                try {
+                    switch (scanner.nextInt()){
+                        case 1:
+                            System.out.println("Enter a name or email to search all suitable people.");
+                            find(people, scanner.next());
+                            break;
+                        case 2:
+                            print(people);
+                            break;
+                        case 0:
+                            System.out.println("Bye!");
+                            stop = false;
+                            break;
+                        default:
+                            System.out.println("Incorrect option! Try again.");
+                    }
+                }catch (InputMismatchException e){
+                    scanner.nextLine();
+                    System.out.println("Incorrect option! Try again.");
+                }
+            }
+        }catch (FileNotFoundException e){
+            System.out.println("no file");
+        }
+    }
+
+    static void find(String[] people, String human){
+        boolean check = false;
+        for (String string : people) {
+            if (string.toLowerCase().contains(human.toLowerCase())) {
+                System.out.println(string);
+                check = true;
+            }
+        }
+        if(!check)
+            System.out.println("No matching people found.");
+        System.out.println();
+    }
+
+    static void print(String[] people){
+        System.out.println("=== List of people ===");
+        for (String person : people) {
+            System.out.println(person);
+        }
+        System.out.println();
+    }
+}
